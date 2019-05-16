@@ -1,0 +1,128 @@
+#include "Carriage.h"
+#include "Pumpkin.h"
+#include "date.h"
+#include "PumpkinPatch.h"
+
+#include <iostream>
+#include <vector>
+#include <string>
+using namespace std;
+
+//***************************************************************
+PumpkinPatch PumpkinPatch::Create(size_t n, Pumpkin::Colour c){
+	std::vector<Pumpkin> patch_;
+	Pumpkin *newPumpkin = new Pumpkin::Create(c);
+
+	for ( int i=0 ; i<n ; i++){
+	patch_.push_back(*newPumpkin);
+	}
+}
+
+//***************************************************************
+PumpkinPatch::PumpkinPatch(vector<Pumpkin*> p)
+	:newPatch_(this), size_(this->size())
+{
+}
+
+
+//***************************************************************
+PumpkinPatch::PumpkinPatch(const PumpkinPatch& other)
+	:newPatch_(other.newPatch_), size_(other.size_)
+{
+}
+
+
+//***************************************************************
+PumpkinPatch::~PumpkinPatch(){
+	for( int i=0; i<size_; i++){
+		delete newPatch_[i];
+	}
+}
+
+
+//***************************************************************
+PumpkinPatch& PumpkinPatch::operator = (const PumpkinPatch& p ){
+	for( int i=0; i<size_; i++){
+		delete newPatch_[i];
+	}
+	for( int i=0; i<size_; i++){
+		newPatch_.push_back( p[i])
+	}
+return newPatch_;
+}
+
+
+
+//***************************************************************
+
+size_t PumpkinPatch::size() const{
+	return size_;
+}
+
+//***************************************************************
+
+Pumpkin& PumpkinPatch::operator[] (size_t i){
+	return *(this->newPatch_[i]);
+}
+
+//***************************************************************
+
+Pumpkin** PumpkinPatch::begin(){
+
+	return &newPatch_[0]
+}
+
+//***************************************************************
+
+Pumpkin** PumpkinPatch::end(){
+	return &newPatch_[size_];
+}
+
+//***************************************************************
+
+size_t PumpkinPatch::carve(){
+	size_t x=0;
+	
+	for(unsigned int i=0; i<size_; i++){
+			try{
+				newPatch_[i].carve();
+				x++;
+				}
+	catch (PumpkinException){}
+	}
+return x;
+}
+
+//***************************************************************
+
+size_t PumpkinPatch::light(){
+	size_t y=0;
+	
+	for(unsigned int i=0; i<size_; i++){
+			try{
+				newPatch_[i].light();
+				y++;
+			}
+	catch (PumpkinException){}
+	}
+return y;
+}
+
+//***************************************************************
+
+std::vector<Carriage> PumpkinPatch::makeCarriages(){
+	std::vector<Carriage> myCarriages;
+	for (unsigned int i=0;i<size_;i++){
+		Pumpkin::Colour colour = newPatch_[i].colour();
+		myCarriages.push_back(Carriage(colour));		
+		delete newPatch_[i];
+	}	
+
+return myCarriages;
+}
+
+
+
+
+
+

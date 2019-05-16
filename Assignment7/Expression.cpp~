@@ -1,0 +1,119 @@
+#include "Expression.h"
+
+using namespace calc;
+using namespace std;
+
+namespace calc{
+//**************************************************************************
+
+//constructor for literal
+cLiteral::cLiteral( double x )
+	 :lit_(x)
+{
+}
+
+double cLiteral::evaluate() const{
+	return lit_;
+}
+
+ExpPtr Expression::Literal(double x){
+	ExpPtr newLit( new cLiteral(x) );
+	return newLit;
+}
+
+//**************************************************************************
+
+// Binary Operation Constructor
+BinaryOperation::BinaryOperation(ExpPtr lhs, ExpPtr rhs)
+	:left_( move(lhs)) , right_(move(rhs)) 
+{
+}
+
+//**************************************************************************
+
+//Add operation conctructor
+cAdd::cAdd(ExpPtr lhs, ExpPtr rhs)
+	:BinaryOperation( move(lhs) , move(rhs) )
+{
+}
+
+ExpPtr BinaryOperation::Add(ExpPtr lhs, ExpPtr rhs){
+	ExpPtr newADD ( new cAdd(move(lhs), move(rhs) ) );
+	return newADD;
+}
+
+double cAdd::evaluate() const{
+	return ( left_->evaluate()  + right_->evaluate() );
+}
+
+//**************************************************************************
+
+//Subtract Operation Constructor
+cSubtract::cSubtract(ExpPtr lhs, ExpPtr rhs)
+	:BinaryOperation(move(lhs),move(rhs))
+{
+}
+
+ExpPtr BinaryOperation::Subtract(ExpPtr lhs, ExpPtr rhs){
+	ExpPtr newSUBTRACT ( new cSubtract(move(lhs), move(rhs) ) );
+	return newSUBTRACT;
+}
+
+double cSubtract::evaluate() const{
+	return ( left_->evaluate()  - right_->evaluate() );
+}
+
+//**************************************************************************
+
+//multiply operation constructor
+cMultiply::cMultiply(ExpPtr lhs, ExpPtr rhs)
+	:BinaryOperation(move(lhs),move(rhs))
+{
+}
+
+ExpPtr BinaryOperation::Multiply(ExpPtr lhs, ExpPtr rhs){
+	ExpPtr newMULTIPLY ( new cMultiply(move(lhs), move(rhs) ) );
+	return newMULTIPLY;
+}
+
+double cMultiply::evaluate() const{
+	return ( left_->evaluate()  * right_->evaluate() );
+}
+
+//**************************************************************************
+
+//divide operation constructor
+cDivide::cDivide(ExpPtr lhs, ExpPtr rhs)
+	:BinaryOperation(move(lhs),move(rhs))
+{
+}
+
+ExpPtr BinaryOperation::Divide(ExpPtr lhs, ExpPtr rhs){
+	ExpPtr newDIVIDE ( new cDivide(move(lhs), move(rhs) ) );
+	return newDIVIDE;
+}
+
+double cDivide::evaluate() const{
+	return ( left_->evaluate() / right_->evaluate() );
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+}
